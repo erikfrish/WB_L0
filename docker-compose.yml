@@ -1,0 +1,49 @@
+version: '3'
+services:
+
+  postgres:
+    container_name: db
+    image: postgres:latest
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - './internal/storage/db_dump:/db_dump'
+      - DATABASE_L0:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  nats-streaming:
+    container_name: nats-streaming
+    image: nats-streaming:latest
+    restart: always
+    ports:
+      - "8223:8223"
+      - "4223:4223"
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  cache:
+    container_name: cache
+    image: redis:latest
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    volumes:
+      - cache:/data
+
+volumes:
+  DATABASE:
+  CACHE:
+#    driver: local
+ 
+  
+
+
+
+  
