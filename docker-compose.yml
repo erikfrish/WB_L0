@@ -15,32 +15,19 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
 
-  nats-streaming:
-    container_name: nats-streaming
+  stan:
+    container_name: stan
     image: nats-streaming:latest
     restart: always
     ports:
       - "8223:8223"
       - "4223:4223"
     environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-
-  cache:
-    container_name: cache
-    image: redis:latest
-    restart: always
-    ports:
-      - '6379:6379'
-    command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
-    volumes:
-      - cache:/data
+      - STAN_CLUSTER_ID=L0_cluster
+    command: ["--cluster_id=L0_cluster"]
 
 volumes:
-  DATABASE:
-  CACHE:
-#    driver: local
+  DATABASE_L0:
  
   
 
