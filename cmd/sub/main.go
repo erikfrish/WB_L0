@@ -2,13 +2,16 @@ package main
 
 import (
 	"L0/internal/config"
-	db "L0/internal/storage/postgres"
+
+	"L0/internal/storage/db"
+	// order "L0/internal/strct"
+	"L0/internal/cache"
+	pg "L0/pkg/client/postgresql"
 	"L0/pkg/logger/handlers/slogpretty"
 	"L0/pkg/logger/sl"
-	data "L0/pkg/strct"
+	"context"
 	"fmt"
 	"os"
-	"sync"
 	"time"
 
 	"log/slog"
@@ -26,31 +29,37 @@ func main() {
 	log.Info("starting sub", slog.String("env", cfg.Env))
 	log.Debug("debug messages are enabled")
 
-	cache := NewCache()
-	cache.data[""] = ""
-	cache.data["privet"] = "poka"
+	// making cache
+	Cache := cache.NewCache()
+	// cache.items[""] = order.Data{}
+	// cache.data["privet"] = "jack"
 	// ma, _ := json.Marshal(cache.data)
 	// fmt.Println(cache, cache.data, string(ma))
 
-	storage, err := db.New(cfg.Storage)
+	// making db connection
+	ctx := context.TODO()
+	pg_pool, err := pg.NewClient(ctx, 1, cfg.Storage)
 	if err != nil {
 		log.Error("failed to init storage", sl.Err(err))
 		os.Exit(1)
 	}
-	_ = storage
-	var data data.Data
-	data.CustomerID = "not_a_real_id"
-	fmt.Println(data.Value())
-	fmt.Println("\n\n\n")
-	// data := map[string]string{"order_uid": "b563feb7b2b84b6test", "track_number": "WBILMTESTTRACK", "entry": "WBIL"}
-	// data1, err := json.Marshal(data)
+	rep := db.NewRepository(pg_pool, log)
+
+	fmt.Println("\nfirst test of cache", Cache.Items)
+	Cache.Restore(ctx, rep)
+	fmt.Println("\nsecond test of cache", Cache.Items)
+
+	// got_data, err := rep.Get(ctx, "template")
 	// if err != nil {
-	// 	log.Error(fmt.Sprintf("failed to marshall data"), sl.Err(err))
+	// 	log.Error("failed to get from db", sl.Err(err))
 	// }
-	in, err := storage.Save("loh", data)
-	if err != nil {
-		log.Error(fmt.Sprintf("failed to save to db, %d", in), sl.Err(err))
-	}
+	// fmt.Println("got_data=", got_data)
+
+	// got_m_data, err := rep.GetAll(ctx)
+	// if err != nil {
+	// 	log.Error("failed to get from db", sl.Err(err))
+	// }
+	// fmt.Println("\ngot_m_data=", got_m_data)
 
 	clusterID := "L0_cluster"
 	clientID := "L0_sub"
@@ -84,22 +93,9 @@ func main() {
 		log.Error("Subscription to Stan wasn't successful", sl.Err(err))
 	}
 
-	<-time.After(time.Second * 10)
+	<-time.After(time.Second * 1)
 	sub.Unsubscribe()
 
-}
-
-// Cache представляет кэш для хранения данных заказов в оперативной памяти.
-type Cache struct {
-	mu   sync.RWMutex
-	data map[string]string
-}
-
-// NewCache созадёт новый экземпляр кэша и возвращает указатель на него
-func NewCache() *Cache {
-	return &Cache{
-		data: make(map[string]string),
-	}
 }
 
 const (

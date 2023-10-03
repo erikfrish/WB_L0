@@ -1,4 +1,4 @@
-package data
+package order
 
 import (
 	"database/sql/driver"
@@ -59,10 +59,25 @@ func (d Data) Value() (driver.Value, error) {
 	return json.Marshal(d)
 }
 
-func (d *Data) Scan(value interface{}) error {
+func (d *Data) Scan(value any) error {
 	b, ok := value.([]byte)
 	if !ok {
 		return errors.New("type assertion to []byte failed")
 	}
 	return json.Unmarshal(b, &d)
 }
+
+// type MultipleData []Data
+
+// func (m *MultipleData) Scan(values ...any) error {
+// 	var err error
+// 	for i, value := range values {
+// 		b, ok := value.([]byte)
+// 		if !ok {
+// 			return errors.New("type assertion to []byte failed")
+// 		}
+// 		m1 := make(MultipleData, len(values))
+// 		err = json.Unmarshal(b, &m1[i])
+// 	}
+// 	return err
+// }

@@ -2,10 +2,11 @@ package db
 
 import (
 	"L0/internal/config"
-	"L0/internal/storage"
-	data "L0/pkg/strct"
+	// "L0/internal/storage"
+	order_data "L0/internal/strct"
 	"database/sql"
-	"errors"
+
+	// "errors"
 	"fmt"
 
 	"github.com/jackc/pgx"
@@ -45,7 +46,7 @@ func New(storage config.Storage) (*Storage, error) {
 	return &Storage{db: db}, nil
 }
 
-func (s *Storage) Save(id string, data data.Data) (int64, error) {
+func (s *Storage) Save(id string, data order_data.Data) (int64, error) {
 	const op = "storage.db.Save"
 
 	stmt, err := s.db.Prepare("INSERT INTO \"L0_orders\"(id, data) VALUES('$1','$2');")
@@ -67,23 +68,23 @@ func (s *Storage) Save(id string, data data.Data) (int64, error) {
 	return idx, nil
 }
 
-func (s *Storage) GetURL(alias string) (string, error) {
-	const op = "storage.db.GetURL"
+// func (s *Storage) GetURL(alias string) (string, error) {
+// 	const op = "storage.db.GetURL"
 
-	stmt, err := s.db.Prepare("SELECT url FROM url WHERE alias = '?'")
-	if err != nil {
-		return "", fmt.Errorf("%s: prepare statement %w", op, err)
-	}
-	var resURL string
-	err = stmt.QueryRow(alias).Scan((&resURL))
-	if errors.Is(err, sql.ErrNoRows) {
-		return "", storage.ErrURLNotFound
-	}
-	if err != nil {
-		return "", fmt.Errorf("%s: execute statement: %w", op, err)
-	}
+// 	stmt, err := s.db.Prepare("SELECT url FROM url WHERE alias = '?'")
+// 	if err != nil {
+// 		return "", fmt.Errorf("%s: prepare statement %w", op, err)
+// 	}
+// 	var resURL string
+// 	err = stmt.QueryRow(alias).Scan((&resURL))
+// 	if errors.Is(err, sql.ErrNoRows) {
+// 		return "", storage.ErrURLNotFound
+// 	}
+// 	if err != nil {
+// 		return "", fmt.Errorf("%s: execute statement: %w", op, err)
+// 	}
 
-	return resURL, nil
-}
+// 	return resURL, nil
+// }
 
 // TODO: func (s *Storage) DeleteURL(alias string) error {}

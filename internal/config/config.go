@@ -24,7 +24,7 @@ type HTTPServer struct {
 
 type Storage struct {
 	Host     string `yaml:"host" env-default:"localhost"`
-	Port     int    `yaml:"port" env-default:"5432"`
+	Port     string `yaml:"port" env-default:"5432"`
 	User     string `yaml:"user" env-default:"postgres"`
 	Password string `yaml:"password" env-default:"postgres"`
 	DB_Name  string `yaml:"db" env-default:"postgres"`
