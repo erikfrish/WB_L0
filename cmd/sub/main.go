@@ -1,30 +1,30 @@
 package main
 
 import (
-	"L0/internal/config"
-
-	"L0/internal/storage/db"
-	// order "L0/internal/strct"
 	"L0/internal/cache"
+	"L0/internal/config"
+	"L0/internal/http-server/handlers/get"
+	mwLogger "L0/internal/http-server/middleware"
+	"L0/internal/storage/db"
 	pg "L0/pkg/client/postgresql"
-	"L0/pkg/logger/handlers/slogpretty"
+	"L0/pkg/logger"
 	"L0/pkg/logger/sl"
 	"context"
 	"fmt"
+	"log/slog"
+	"net/http"
 	"os"
 	"time"
 
-	"log/slog"
-
-	// json "encoding/json"
-
+	chi "github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 	nats "github.com/nats-io/nats.go"
 	stan "github.com/nats-io/stan.go"
 )
 
 func main() {
 	cfg := config.MustLoad()
-	log := setupLogger(cfg.Env)
+	log := logger.SetupLogger(cfg.Env)
 
 	log.Info("starting sub", slog.String("env", cfg.Env))
 	log.Debug("debug messages are enabled")
@@ -61,6 +61,32 @@ func main() {
 	// }
 	// fmt.Println("\ngot_m_data=", got_m_data)
 
+	router := chi.NewRouter()
+	router.Use(middleware.RequestID)
+	router.Use(middleware.RealIP)
+	router.Use(mwLogger.New(log))
+
+	router.Use(middleware.Recoverer)
+	router.Use(middleware.URLFormat)
+
+	router.Route("", func(r chi.Router) {
+		r.Post("/{order_uid}", get.New(ctx, log, rep))
+	})
+
+	log.Info("starting server", slog.String("address", cfg.Address))
+
+	srv := &http.Server{
+		Addr:         cfg.Address,
+		Handler:      router,
+		ReadTimeout:  cfg.HTTPServer.Timeout,
+		WriteTimeout: cfg.HTTPServer.Timeout,
+		IdleTimeout:  cfg.HTTPServer.IdleTimeout,
+	}
+
+	if err := srv.ListenAndServe(); err != nil {
+		log.Error("failed to start server")
+	}
+
 	clusterID := "L0_cluster"
 	clientID := "L0_sub"
 	URL := stan.DefaultNatsURL
@@ -96,37 +122,4 @@ func main() {
 	<-time.After(time.Second * 1)
 	sub.Unsubscribe()
 
-}
-
-const (
-	envLocal = "local"
-	envDev   = "dev"
-	envProd  = "prod"
-)
-
-func setupLogger(env string) *slog.Logger {
-	var log *slog.Logger
-	switch env {
-	case envLocal:
-		log = setupPrettySlog()
-	case envDev:
-		log = slog.New(
-			slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug}),
-		)
-	case envProd:
-		log = slog.New(
-			slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}),
-		)
-	}
-	return log
-}
-
-func setupPrettySlog() *slog.Logger {
-	opts := slogpretty.PrettyHandlerOptions{
-		SlogOpts: &slog.HandlerOptions{
-			Level: slog.LevelDebug,
-		},
-	}
-	handler := opts.NewPrettyHandler(os.Stdout)
-	return slog.New(handler)
 }
