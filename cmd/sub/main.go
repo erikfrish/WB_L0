@@ -6,6 +6,7 @@ import (
 	"L0/internal/http-server/handlers/get"
 	mwLogger "L0/internal/http-server/middleware"
 	"L0/internal/storage/db"
+
 	pg "L0/pkg/client/postgresql"
 	"L0/pkg/logger"
 	"L0/pkg/logger/sl"
@@ -30,11 +31,7 @@ func main() {
 	log.Debug("debug messages are enabled")
 
 	// making cache
-	Cache := cache.NewCache()
-	// cache.items[""] = order.Data{}
-	// cache.data["privet"] = "jack"
-	// ma, _ := json.Marshal(cache.data)
-	// fmt.Println(cache, cache.data, string(ma))
+	cache := cache.NewCache()
 
 	// making db connection
 	ctx := context.TODO()
@@ -44,22 +41,15 @@ func main() {
 		os.Exit(1)
 	}
 	rep := db.NewRepository(pg_pool, log)
+	_ = rep
 
-	fmt.Println("\nfirst test of cache", Cache.Items)
-	Cache.Restore(ctx, rep)
-	fmt.Println("\nsecond test of cache", Cache.Items)
-
-	// got_data, err := rep.Get(ctx, "template")
-	// if err != nil {
-	// 	log.Error("failed to get from db", sl.Err(err))
-	// }
-	// fmt.Println("got_data=", got_data)
-
-	// got_m_data, err := rep.GetAll(ctx)
-	// if err != nil {
-	// 	log.Error("failed to get from db", sl.Err(err))
-	// }
-	// fmt.Println("\ngot_m_data=", got_m_data)
+	cache.Restore(ctx, rep)
+	log.Info("\nfirst test of cache\n", cache.Items)
+	got, err := rep.GetAll(ctx)
+	if err != nil {
+		log.Error("couldn't get data from db", err)
+	}
+	log.Info("\nTest of GetAll func from db", got)
 
 	router := chi.NewRouter()
 	router.Use(middleware.RequestID)
@@ -68,9 +58,8 @@ func main() {
 
 	router.Use(middleware.Recoverer)
 	router.Use(middleware.URLFormat)
-
-	router.Route("", func(r chi.Router) {
-		r.Post("/{order_uid}", get.New(ctx, log, rep))
+	router.Route("/order_uid", func(r chi.Router) {
+		r.Get("/{order_uid}", get.New(ctx, log, cache))
 	})
 
 	log.Info("starting server", slog.String("address", cfg.Address))

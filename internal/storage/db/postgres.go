@@ -16,8 +16,8 @@ import (
 )
 
 type Repository interface {
-	Get(ctx context.Context, order_uid string) (order.Data, error)
-	GetAll(ctx context.Context) ([]order.Data, error)
+	Get(ctx context.Context, order_uid string) (any, error)
+	GetAll(ctx context.Context) (any, error)
 	Insert(ctx context.Context, data order.Data) error
 	// And maybe more in future
 }
@@ -27,7 +27,7 @@ type repository struct {
 	logger *slog.Logger
 }
 
-func (r *repository) Get(ctx context.Context, order_uid string) (order.Data, error) {
+func (r *repository) Get(ctx context.Context, order_uid string) (any, error) {
 	q := `SELECT data FROM "L0_orders" WHERE id = $1`
 	var row []byte
 	err := r.client.QueryRow(ctx, q, order_uid).Scan(&row)
@@ -39,7 +39,7 @@ func (r *repository) Get(ctx context.Context, order_uid string) (order.Data, err
 	return res, nil
 }
 
-func (r *repository) GetAll(ctx context.Context) ([]order.Data, error) {
+func (r *repository) GetAll(ctx context.Context) (any, error) {
 	q := `SELECT data FROM "L0_orders"`
 	rows, err := r.client.Query(ctx, q)
 	if err != nil {

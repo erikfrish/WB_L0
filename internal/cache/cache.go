@@ -27,29 +27,40 @@ func (c *Cache) Restore(ctx context.Context, rep db.Repository) error {
 	if err != nil {
 		return err
 	}
-	for _, v := range data {
+	// data1 := data.([]order.Data)
+	for _, v := range data.([]order.Data) {
 		c.Set(v.OrderUID, v)
 	}
 	return nil
 }
 
-func (c *Cache) Set(key string, data any) error {
+func (c *Cache) Set(order_uid string, data any) error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	item, ok := data.(order.Data)
 	if !ok {
 		return fmt.Errorf("type assertion to order.Data failed")
 	}
-	c.Items[key] = item
+	c.Items[order_uid] = item
 	return nil
 }
 
-func (c *Cache) Get(key string) (any, error) {
+// func (c *Cache) Get(key string) (any, error) {
+// 	c.mu.RLock()
+// 	defer c.mu.Unlock()
+// 	item, found := c.Items[key]
+// 	if !found {
+// 		return nil, fmt.Errorf("key not found")
+// 	}
+// 	return item, nil
+// }
+
+func (c *Cache) Get(ctx context.Context, order_uid string) (any, error) {
 	c.mu.RLock()
-	defer c.mu.Unlock()
-	item, found := c.Items[key]
+	defer c.mu.RUnlock()
+	item, found := c.Items[order_uid]
 	if !found {
-		return nil, fmt.Errorf("key not found")
+		return order.Data{}, fmt.Errorf("key not found")
 	}
 	return item, nil
 }
