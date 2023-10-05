@@ -2,6 +2,7 @@ package main
 
 import (
 	"L0/internal/config"
+	order "L0/internal/strct"
 	"L0/pkg/logger/handlers/slogpretty"
 	"L0/pkg/logger/sl"
 
@@ -19,7 +20,7 @@ func main() {
 	cfg := config.MustLoad()
 	log := setupLogger(cfg.Env)
 
-	log.Info("starting sub", slog.String("env", cfg.Env))
+	log.Info("starting pub", slog.String("env", cfg.Env))
 	log.Debug("debug messages are enabled")
 
 	clusterID := "L0_cluster"
@@ -32,13 +33,24 @@ func main() {
 		log.Error("Connection to Stan wasn't successful", sl.Err(err))
 	}
 
+	channel := "L0_chan"
+
+	data := order.Data{
+		OrderUID: "publishing_from_pub_1",
+	}
+	data_to_send, err := data.Value()
+	log.Info("going to send", data_to_send)
+	if err != nil {
+		log.Error("failed to marshal data", data)
+	}
+
 	// Simple Synchronous Publisher
-	sc.Publish("foo", []byte("Hello 1")) // does not return until an ack has been received from NATS Streaming
+	sc.Publish(channel, data_to_send.([]byte)) // does not return until an ack has been received from NATS Streaming
 	time.Sleep(time.Second * 2)
-	sc.Publish("foo", []byte("Hello 2"))
-	time.Sleep(time.Second * 2)
-	sc.Publish("foo", []byte("Hello 3"))
-	time.Sleep(time.Second * 2)
+	// sc.Publish(channel, []byte("Hello 2"))
+	// time.Sleep(time.Second * 2)
+	// sc.Publish(channel, []byte("Hello 3"))
+	// time.Sleep(time.Second * 2)
 	// Simple Async Subscriber
 	// sub, err := sc.Subscribe("foo", func(m *stan.Msg) {
 	// 	fmt.Printf("Received a message: %s\n", string(m.Data))

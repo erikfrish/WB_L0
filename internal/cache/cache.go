@@ -29,19 +29,26 @@ func (c *Cache) Restore(ctx context.Context, rep db.Repository) error {
 	}
 	// data1 := data.([]order.Data)
 	for _, v := range data.([]order.Data) {
-		c.Set(v.OrderUID, v)
+		c.Insert(ctx, v)
 	}
 	return nil
 }
 
-func (c *Cache) Set(order_uid string, data any) error {
+// func (c *Cache) Set(order_uid string, data any) error {
+// 	c.mu.Lock()
+// 	defer c.mu.Unlock()
+// 	item, ok := data.(order.Data)
+// 	if !ok {
+// 		return fmt.Errorf("type assertion to order.Data failed")
+// 	}
+// 	c.Items[order_uid] = item
+// 	return nil
+// }
+
+func (c *Cache) Insert(ctx context.Context, data order.Data) error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	item, ok := data.(order.Data)
-	if !ok {
-		return fmt.Errorf("type assertion to order.Data failed")
-	}
-	c.Items[order_uid] = item
+	c.Items[data.OrderUID] = data
 	return nil
 }
 
