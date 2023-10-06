@@ -67,10 +67,6 @@ services:
 volumes:
   DATABASE_L0:
  
-networks:
-  my-network:
-    driver: bridge
-
-
-
-  
+# networks:
+#   my-network:
+#     driver: bridge

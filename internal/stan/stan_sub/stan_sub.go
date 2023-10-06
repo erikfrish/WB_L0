@@ -12,10 +12,12 @@ import (
 	"github.com/nats-io/stan.go"
 )
 
+// cache or db rep entity
 type DataSaver interface {
 	Insert(ctx context.Context, data order.Data) error
 }
 
+// make subscription with msgHandler, which inserts data to cache or db rep
 func SubscribeWithParams(ctx context.Context, log *slog.Logger, cache, rep DataSaver) {
 
 	clusterID := "L0_cluster"
@@ -25,25 +27,27 @@ func SubscribeWithParams(ctx context.Context, log *slog.Logger, cache, rep DataS
 	channel := "L0_chan"
 
 	opts := []nats.Option{nats.Name("NATS Streaming Example Publisher")}
-	// Use UserCredentials
+	// can use UserCredentials if needed
 	if userCreds != "" {
 		opts = append(opts, nats.UserCredentials(userCreds))
 	}
 
+	// connecting to nats
 	nc, err := nats.Connect(URL, opts...)
 	if err != nil {
 		log.Error("", sl.Err(err))
 	}
 
+	//connecting to stan with nats connection
 	sc, err := stan.Connect(clusterID, clientID, stan.NatsConn(nc))
 	if err != nil {
 		log.Error("Can't connect: %v.\nMake sure a NATS Streaming Server is running at: %s", err, URL)
 	}
 
-	// Simple Async Subscriber
-
+	// initializing simple async subscriber and describing msgHandler
 	sub, err := sc.Subscribe(channel, func(m *stan.Msg) {
-		log.Info("got smth INFO!")
+		log.Info("got smth!")
+		log.Info("msg.Data: ", m.Data)
 		var data order.Data
 		data.Scan(m.Data)
 		// cache.Insert(ctx, order.Data{OrderUID: "stan_inserting_into_cache"})
@@ -53,6 +57,7 @@ func SubscribeWithParams(ctx context.Context, log *slog.Logger, cache, rep DataS
 	})
 	// }, stan.StartWithLastReceived())
 	// }, stan.DeliverAllAvailable())
+
 	if err != nil {
 		log.Error("Subscription to Stan wasn't successful", sl.Err(err))
 	}
@@ -64,8 +69,8 @@ func SubscribeWithParams(ctx context.Context, log *slog.Logger, cache, rep DataS
 		for range signalChan {
 			log.Info("\nReceived an interrupt, unsubscribing and closing connection...\n\n")
 			sub.Unsubscribe()
-			nc.Close()
 			sc.Close()
+			nc.Close()
 			cleanupDone <- true
 		}
 	}()

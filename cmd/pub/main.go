@@ -5,6 +5,7 @@ import (
 	order "L0/internal/strct"
 	"L0/pkg/logger/handlers/slogpretty"
 	"L0/pkg/logger/sl"
+	"fmt"
 
 	// "fmt"
 	"os"
@@ -36,13 +37,18 @@ func main() {
 	channel := "L0_chan"
 
 	data := order.Data{
-		OrderUID: "publishing_from_pub_1",
+		OrderUID:    "publishing_from_pub_1",
+		TrackNumber: "publishing_with_pub",
 	}
 	data_to_send, err := data.Value()
-	log.Info("going to send", data_to_send)
+	log.Info("going to send", data)
+	fmt.Println("going to send", data)
+	fmt.Println("going to send", data_to_send)
 	if err != nil {
 		log.Error("failed to marshal data", data)
 	}
+	data_to_send = data_to_send.([]byte)
+	log.Info("going to send", data_to_send)
 
 	// Simple Synchronous Publisher
 	sc.Publish(channel, data_to_send.([]byte)) // does not return until an ack has been received from NATS Streaming
