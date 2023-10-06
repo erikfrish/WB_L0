@@ -37,8 +37,8 @@ func main() {
 	channel := "L0_chan"
 
 	data := order.Data{
-		OrderUID:    "publishing_from_pub_1",
-		TrackNumber: "publishing_with_pub",
+		OrderUID:    "publishing_from_pub_11",
+		TrackNumber: "publishing_with_pub_11",
 	}
 	data_to_send, err := data.Value()
 	log.Info("going to send", data)

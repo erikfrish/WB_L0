@@ -1,45 +1,45 @@
 version: '3'
 services:
 
-  # sub:
-  #   container_name: sub
-  #   image: golang:1.21
-  #   restart: always
-  #   ports:
-  #     - "8082:8082"
-  #   volumes:
-  #     - './:/usr/src/L0'
-  #   working_dir: "/usr/src/L0"
-  #   # command: 
-  #     # - "pwd"
-  #     # - "export PATH='/go:$PATH'"
-  #     # - "source /go/bin/go1.21"
-  #     # - "go run ./cmd/sub.main.go"
-  #     # - "go run /usr/src/L0/cmd/sub/main.go"
-  #     # - "go mod tidy"
-  #   command: "go run /usr/src/L0/cmd/sub/main.go"
-  #   networks:
-  #     - my-network
+  sub:
+    container_name: sub
+    image: golang:1.21
+    restart: always
+    ports:
+      - "8082:8082"
+    volumes:
+      - './:/usr/src/L0'
+    working_dir: "/usr/src/L0"
+    # command: 
+      # - "pwd"
+      # - "export PATH='/go:$PATH'"
+      # - "source /go/bin/go1.21"
+      # - "go run ./cmd/sub.main.go"
+      # - "go run /usr/src/L0/cmd/sub/main.go"
+      # - "go mod tidy"
+    command: "go run /usr/src/L0/cmd/sub/main.go"
+    networks:
+      - L0-network
 
-  # nginx:
-  #   container_name: nginx
-  #   hostname: nginx.docker
-  #   image: nginx:latest
-  #   restart: always
-  #   ports:
-  #     - 81:80
-  #     - 443:443
-  #     # - 8082:8082
-  #   volumes:
-  #     - './cmd/front:/var/www/html'
-  #     - './docker/nginx/conf.d:/etc/nginx/conf.d'
-  #   networks:
-  #     - my-network
-  #   links:
-  #     - sub
+  nginx:
+    container_name: nginx
+    hostname: nginx.docker
+    image: nginx:latest
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+      # - 8082:8082
+    volumes:
+      - './cmd/front:/var/www/html'
+      - './docker/nginx/conf.d:/etc/nginx/conf.d'
+    # links:
+    #   - sub
+    networks:
+      - L0-network
 
   postgres:
-    container_name: db
+    container_name: postgres
     image: postgres:latest
     restart: always
     ports:
@@ -51,6 +51,8 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    networks:
+      - L0-network
 
   stan:
     container_name: stan
@@ -63,10 +65,12 @@ services:
     environment:
       - STAN_CLUSTER_ID=L0_cluster
     command: ["--cluster_id=L0_cluster"]
+    networks:
+      - L0-network
 
 volumes:
   DATABASE_L0:
  
-# networks:
-#   my-network:
-#     driver: bridge
+networks:
+  L0-network:
+    driver: bridge

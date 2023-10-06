@@ -11,7 +11,8 @@ import (
 type Config struct {
 	Env        string `yaml:"env" env:"ENV" env-default:"local"` // env-required:"true"
 	Storage    `yaml:"storage" env-required:"true"`
-	HTTPServer `yaml:"http_server"`
+	HTTPServer `yaml:"http_server" env-required:"true"`
+	Stan       `yaml:"stan" env-required:"true"`
 }
 
 type HTTPServer struct {
@@ -30,9 +31,18 @@ type Storage struct {
 	DB_Name  string `yaml:"db" env-default:"postgres"`
 }
 
+type Stan struct {
+	URL       string `yaml:"url" env-default:"http://127.0.0.1:4222"`
+	ClusterID string `yaml:"cluster_id" env-default:"L0_cluster"`
+	ClientID  string `yaml:"client_id" env-default:"L0_sub"`
+	UserCreds string `yaml:"user_creds" env-default:""`
+	Channel   string `yaml:"channel" env-default:"L0_chan"`
+}
+
 func MustLoad() *Config {
 	// configPath := os.Getenv("CONFIG_PATH")
-	configPath := "config/local.yaml"
+	// configPath := "config/local.yaml"
+	configPath := "config/local-docker.yaml"
 	if configPath == "" {
 		log.Fatal("CONFIG_PATH is not set")
 	}

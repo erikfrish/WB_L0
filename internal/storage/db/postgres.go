@@ -73,16 +73,15 @@ func (r *repository) Insert(ctx context.Context, data order.Data) error {
 	if err != nil {
 		return err
 	}
-	if err := r.client.QueryRow(ctx, q, order_uid, data_row).Scan(); err != nil {
+	if _, err := r.client.Exec(ctx, q, order_uid, data_row); err != nil {
 		var pgErr *pgconn.PgError
 		if errors.As(err, &pgErr) {
 			pgErr = err.(*pgconn.PgError)
 			newErr := fmt.Errorf(fmt.Sprintf("SQL Error: %s, Detail: %s, Where: %s, Code: %s, SQLState: %s",
 				pgErr.Message, pgErr.Detail, pgErr.Where, pgErr.Code, pgErr.SQLState()))
-			r.logger.Error("", newErr)
 			return newErr
 		}
-		return err
+		return errors.Join(errors.New("query error "), err)
 	}
 	return nil
 }

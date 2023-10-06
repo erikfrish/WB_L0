@@ -1,6 +1,6 @@
 env: "local" #local, dev, prod
 storage:
-  host: "127.0.0.1"
+  host: "postgres"
   port: "5432"
   user: "postgres"
   password: "postgres"
@@ -12,8 +12,8 @@ http_server:
   user: "my_user"
   password: "my_pass"
 stan:
-  url: "http://127.0.0.1:4222"
-	cluster_id: "L0_cluster"
-	client_id: "L0_sub"
-	user_creds: ""
-	channel: "L0_chan"
+  url: "http://stan:4222"
+  cluster_id: "L0_cluster"
+  client_id: "L0_sub"
+  user_creds: ""
+  channel: "L0_chan"

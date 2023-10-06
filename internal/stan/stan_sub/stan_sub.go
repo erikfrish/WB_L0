@@ -1,6 +1,7 @@
 package stan_sub
 
 import (
+	"L0/internal/config"
 	order "L0/internal/strct"
 	"L0/pkg/logger/sl"
 	"context"
@@ -20,40 +21,41 @@ type DataSaver interface {
 // make subscription with msgHandler, which inserts data to cache or db rep
 func SubscribeWithParams(ctx context.Context, log *slog.Logger, cache, rep DataSaver) {
 
-	clusterID := "L0_cluster"
-	clientID := "L0_sub"
-	URL := stan.DefaultNatsURL
-	userCreds := ""
-	channel := "L0_chan"
+	cfg := config.MustLoad()
 
 	opts := []nats.Option{nats.Name("NATS Streaming Example Publisher")}
 	// can use UserCredentials if needed
-	if userCreds != "" {
-		opts = append(opts, nats.UserCredentials(userCreds))
+	if cfg.Stan.UserCreds != "" {
+		opts = append(opts, nats.UserCredentials(cfg.Stan.UserCreds))
 	}
 
 	// connecting to nats
-	nc, err := nats.Connect(URL, opts...)
+	nc, err := nats.Connect(cfg.Stan.URL, opts...)
 	if err != nil {
-		log.Error("", sl.Err(err))
+		log.Error("Can't connect to nats", sl.Err(err))
 	}
 
 	//connecting to stan with nats connection
-	sc, err := stan.Connect(clusterID, clientID, stan.NatsConn(nc))
+	sc, err := stan.Connect(cfg.Stan.ClusterID, cfg.Stan.ClientID, stan.NatsConn(nc))
 	if err != nil {
-		log.Error("Can't connect: %v.\nMake sure a NATS Streaming Server is running at: %s", err, URL)
+		log.Error("Can't connect to stan: %v.\nMake sure a NATS Streaming Server is running at: %s", err, cfg.Stan.URL)
 	}
 
 	// initializing simple async subscriber and describing msgHandler
-	sub, err := sc.Subscribe(channel, func(m *stan.Msg) {
-		log.Info("got smth!")
-		log.Info("msg.Data: ", m.Data)
+	sub, err := sc.Subscribe(cfg.Stan.Channel, func(m *stan.Msg) {
+		log.Debug("got smth!")
+		// log.Debug("msg.Data: ", m.Data)
 		var data order.Data
-		data.Scan(m.Data)
-		// cache.Insert(ctx, order.Data{OrderUID: "stan_inserting_into_cache"})
-		// rep.Insert(ctx, order.Data{OrderUID: "stan_inserting_into_db"})
-		cache.Insert(ctx, data)
-		rep.Insert(ctx, data)
+		if err := data.Scan(m.Data); err != nil {
+			log.Error(err.Error())
+		}
+		// log.Debug("data decoded: ", data)
+		if err := rep.Insert(ctx, data); err != nil {
+			log.Error("can't Insert into db", err.Error())
+		}
+		if err := cache.Insert(ctx, data); err != nil {
+			log.Error("can't Insert into cache", err.Error())
+		}
 	})
 	// }, stan.StartWithLastReceived())
 	// }, stan.DeliverAllAvailable())

@@ -5,6 +5,7 @@ import (
 	"L0/internal/storage/db"
 	order "L0/internal/strct"
 	"context"
+	"errors"
 	"sync"
 )
 
@@ -36,6 +37,11 @@ func (c *Cache) Restore(ctx context.Context, rep db.Repository) error {
 func (c *Cache) Insert(ctx context.Context, data order.Data) error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
+	if has := (c.Items[data.OrderUID].OrderUID != ""); !has {
+		c.Items[data.OrderUID] = data
+	} else {
+		return errors.New("Cache has this data already")
+	}
 	c.Items[data.OrderUID] = data
 	return nil
 }

@@ -56,7 +56,11 @@ type Data struct {
 }
 
 func (d Data) Value() (driver.Value, error) {
-	return json.Marshal(d)
+	v, err := json.Marshal(d)
+	if err != nil {
+		err = errors.Join(errors.New("failed to get data Value"), err)
+	}
+	return v, err
 }
 
 func (d *Data) Scan(value any) error {
@@ -64,7 +68,11 @@ func (d *Data) Scan(value any) error {
 	if !ok {
 		return errors.New("type assertion to []byte failed")
 	}
-	return json.Unmarshal(b, &d)
+	if err := json.Unmarshal(b, &d); err != nil {
+		err = errors.Join(errors.New("failed to Scan data to struct"), err)
+		return err
+	}
+	return nil
 }
 
 // type MultipleData []Data
