@@ -5,6 +5,7 @@ import (
 	order "L0/internal/strct"
 	"L0/pkg/logger/sl"
 	"context"
+	"fmt"
 	"log/slog"
 	"net/http"
 
@@ -28,7 +29,7 @@ type OrderDataGetter interface {
 
 func New(ctx context.Context, log *slog.Logger, orderDataGetter OrderDataGetter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		const op = "handlers.get.New"
+		const op = "handlers.getWithUrl.New"
 		log = log.With(
 			slog.String("op", op),
 			slog.String("request_id", middleware.GetReqID(r.Context())),
@@ -38,8 +39,8 @@ func New(ctx context.Context, log *slog.Logger, orderDataGetter OrderDataGetter)
 		data, err := orderDataGetter.Get(ctx, order_uid)
 
 		if err != nil {
-			log.Error("failed to get data/no such order with that id", sl.Err(err))
-			render.JSON(w, r, resp.Error("failed to get data/no such order with that id"))
+			log.Error(fmt.Sprintf("failed to get data/no such order with that id \"%s\" err: \n", order_uid), sl.Err(err))
+			render.JSON(w, r, resp.Error(fmt.Sprintf("failed to get data/no such order with that id \"%s\"", order_uid)))
 			return
 		}
 		log.Info("got data", slog.Any("data", data))

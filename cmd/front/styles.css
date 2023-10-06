@@ -52,3 +52,7 @@ body {
     border-radius: 5px;
     border-color: beige;
 }
+#response {
+    display: inline-block;
+    width: 50%;
+}
