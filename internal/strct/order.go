@@ -9,9 +9,10 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
+//go:generate go run github.com/vektra/mockery/v2@v2.35.2 --name=Value
 type Data struct {
-	OrderUID    string `json:"order_uid" validate:"required"`    // "b563feb7b2b84b6test"
-	TrackNumber string `json:"track_number" validate:"required"` // "WBILMTESTTRACK"
+	OrderUID    string `json:"order_uid" validate:"required"`    // "b563feb7b2b84b6test" // [a-z0-9]{18,20}
+	TrackNumber string `json:"track_number" validate:"required"` // "WBILMTESTTRACK" // [A-Z]{12-14}
 	Entry       string `json:"entry,omitempty"`                  // "WBIL"
 	Delivery    struct {
 		Name    string `json:"name,omitempty" validate:"alpha"`  // "Test Testov"

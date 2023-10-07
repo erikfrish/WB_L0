@@ -1,0 +1,696 @@
+{
+  "id": "b4ab406-6514-c568-e64-21b121b7236",
+  "type": "array",
+  "valueType": "array",
+  "children": [
+    {
+      "id": "c21538-e143-a6e5-fec0-7fe6620ae",
+      "type": "object",
+      "valueType": "",
+      "children": [
+        {
+          "id": "e71bf1f-743-2ac7-1daf-3c7fdbed0",
+          "type": "value",
+          "valueType": "regexp",
+          "children": [],
+          "repeatCount": ["1", "100"],
+          "fieldName": "order_uid",
+          "valueOptions": { "text": "[a-z0-9]{18,20}" },
+          "nullValue": "0",
+          "selectedDependencies": {}
+        },
+        {
+          "id": "ac3ce1-8441-4c24-4833-dc7b16dfd5e",
+          "type": "value",
+          "valueType": "regexp",
+          "children": [],
+          "repeatCount": ["1", "100"],
+          "fieldName": "track_number",
+          "valueOptions": { "text": "[A-Z]{12-14}" },
+          "nullValue": "0",
+          "selectedDependencies": {}
+        },
+        {
+          "id": "6abed2-ac6d-575e-510e-8d2fccf37145",
+          "type": "value",
+          "valueType": "regexp",
+          "children": [],
+          "repeatCount": ["1", "100"],
+          "fieldName": "entry",
+          "valueOptions": { "text": "[A-Z]{4}" },
+          "nullValue": "0",
+          "selectedDependencies": {}
+        },
+        {
+          "id": "14f487b-705d-f6c-416-d1cdfc00545",
+          "type": "object",
+          "valueType": "",
+          "children": [
+            {
+              "id": "b822880-eefc-2eef-c71b-fb28b22d1dee",
+              "type": "value",
+              "valueType": "fullName",
+              "children": [],
+              "repeatCount": ["1", "100"],
+              "fieldName": "name",
+              "valueOptions": { "gender": "any", "language": "en" },
+              "nullValue": "0",
+              "selectedDependencies": {
+                "firstName": {
+                  "fieldName": "Auto",
+                  "indexPath": "*",
+                  "fieldNamePath": [],
+                  "id": null,
+                  "displayPath": "*"
+                },
+                "lastName": {
+                  "fieldName": "Auto",
+                  "indexPath": "*",
+                  "fieldNamePath": [],
+                  "id": null,
+                  "displayPath": "*"
+                },
+                "gender": {
+                  "fieldName": "Auto",
+                  "indexPath": "*",
+                  "fieldNamePath": [],
+                  "id": null,
+                  "displayPath": "*"
+                },
+                "locale": {
+                  "fieldName": "Auto",
+                  "indexPath": "*",
+                  "fieldNamePath": [],
+                  "id": null,
+                  "displayPath": "*"
+                }
+              }
+            },
+            {
+              "id": "26673-8c84-663a-e027-03f5e37e701",
+              "type": "value",
+              "valueType": "regexp",
+              "children": [],
+              "repeatCount": ["1", "100"],
+              "fieldName": "phone",
+              "valueOptions": { "text": "\\+[0-9]{11}" },
+              "nullValue": "0",
+              "selectedDependencies": {}
+            },
+            {
+              "id": "46be66-3654-c21-84b3-c5a8024aeaf",
+              "type": "value",
+              "valueType": "regexp",
+              "children": [],
+              "repeatCount": ["1", "100"],
+              "fieldName": "zip",
+              "valueOptions": { "text": "[0-9]{7}" },
+              "nullValue": "0",
+              "selectedDependencies": {}
+            },
+            {
+              "id": "750c436-d30-fccf-be25-00d4f25e67",
+              "type": "value",
+              "valueType": "city",
+              "children": [],
+              "repeatCount": ["1", "100"],
+              "fieldName": "city",
+              "valueOptions": { "country": "any" },
+              "nullValue": "0",
+              "selectedDependencies": {
+                "country": {
+                  "fieldName": "Auto",
+                  "indexPath": "*",
+                  "fieldNamePath": [],
+                  "id": null,
+                  "displayPath": "*"
+                }
+              }
+            },
+            {
+              "id": "b8414c4-f7c1-547c-da4-fed53b5a2bd",
+              "type": "value",
+              "valueType": "streetAddress",
+              "children": [],
+              "repeatCount": ["1", "100"],
+              "fieldName": "address",
+              "valueOptions": {},
+              "nullValue": "0",
+              "selectedDependencies": {}
+            },
+            {
+              "id": "e01e0a-32aa-ce-255e-182a4c3cbdb4",
+              "type": "value",
+              "valueType": "country",
+              "children": [],
+              "repeatCount": ["1", "100"],
+              "fieldName": "region",
+              "valueOptions": { "format": "name" },
+              "nullValue": "0",
+              "selectedDependencies": {}
+            },
+            {
+              "id": "72fc6f4-130-137-758-d0e00cc42d06",
+              "type": "value",
+              "valueType": "email",
+              "children": [],
+              "repeatCount": ["1", "100"],
+              "fieldName": "email",
+              "valueOptions": {},
+              "nullValue": "0",
+              "selectedDependencies": {
+                "firstName": {
+                  "fieldName": "Auto",
+                  "indexPath": "*",
+                  "fieldNamePath": [],
+                  "id": null,
+                  "displayPath": "*"
+                },
+                "lastName": {
+                  "fieldName": "Auto",
+                  "indexPath": "*",
+                  "fieldNamePath": [],
+                  "id": null,
+                  "displayPath": "*"
+                },
+                "fullName": {
+                  "fieldName": "Auto",
+                  "indexPath": "*",
+                  "fieldNamePath": [],
+                  "id": null,
+                  "displayPath": "*"
+                },
+                "companyName": {
+                  "fieldName": "Auto",
+                  "indexPath": "*",
+                  "fieldNamePath": [],
+                  "id": null,
+                  "displayPath": "*"
+                }
+              }
+            }
+          ],
+          "repeatCount": ["1", "100"],
+          "fieldName": "delivery",
+          "valueOptions": {},
+          "nullValue": "0",
+          "selectedDependencies": {}
+        },
+        {
+          "id": "3db22-b30-0a1d-c0c3-362420d6822",
+          "type": "object",
+          "valueType": "",
+          "children": [
+            {
+              "id": "71c8bc-c34-fc2a-df6e-d28785e0fccc",
+              "type": "value",
+              "valueType": "regexp",
+              "children": [],
+              "repeatCount": ["1", "100"],
+              "fieldName": "transaction",
+              "valueOptions": { "text": "[a-z0-9]{18,20}" },
+              "nullValue": "0",
+              "selectedDependencies": {}
+            },
+            {
+              "id": "63f45d-78db-263-24f2-d80f058bd5b",
+              "type": "value",
+              "valueType": "regexp",
+              "children": [],
+              "repeatCount": ["1", "100"],
+              "fieldName": "request_id",
+              "valueOptions": { "text": "[a-z0-9]{5}" },
+              "nullValue": "0",
+              "selectedDependencies": {}
+            },
+            {
+              "id": "df43be8-aa05-857c-d22f-dff35120c6cf",
+              "type": "value",
+              "valueType": "currency",
+              "children": [],
+              "repeatCount": ["1", "100"],
+              "fieldName": "currency",
+              "valueOptions": { "format": "code" },
+              "nullValue": "0",
+              "selectedDependencies": {
+                "country": {
+                  "fieldName": "Auto",
+                  "indexPath": "*",
+                  "fieldNamePath": [],
+                  "id": null,
+                  "displayPath": "*"
+                }
+              }
+            },
+            {
+              "id": "40be1de-1118-235f-271-62a0833622c",
+              "type": "value",
+              "valueType": "regexp",
+              "children": [],
+              "repeatCount": ["1", "100"],
+              "fieldName": "provider",
+              "valueOptions": { "text": "[a-z]{5}" },
+              "nullValue": "0",
+              "selectedDependencies": {}
+            },
+            {
+              "id": "eb137f-d0c3-025-c5-345cfaddf38",
+              "type": "value",
+              "valueType": "number",
+              "children": [],
+              "repeatCount": ["1", "100"],
+              "fieldName": "amount",
+              "valueOptions": {
+                "min": { "number": 0, "checked": true },
+                "max": { "number": "2000", "checked": true },
+                "decimals": 0,
+                "multipleOf": 0
+              },
+              "nullValue": "0",
+              "selectedDependencies": {}
+            },
+            {
+              "id": "b345f1c-caac-3db1-2301-ce2e7de86b4",
+              "type": "value",
+              "valueType": "number",
+              "children": [],
+              "repeatCount": ["1", "100"],
+              "fieldName": "payment_dt",
+              "valueOptions": {
+                "min": { "number": "163790772", "checked": true },
+                "max": { "number": "1637907727", "checked": true },
+                "decimals": 0,
+                "multipleOf": 0
+              },
+              "nullValue": "0",
+              "selectedDependencies": {}
+            },
+            {
+              "id": "48e68d-1467-804-c83f-d106cb88d8c",
+              "type": "value",
+              "valueType": "regexp",
+              "children": [],
+              "repeatCount": ["1", "100"],
+              "fieldName": "bank",
+              "valueOptions": { "text": "[a-z]{3,10}" },
+              "nullValue": "0",
+              "selectedDependencies": {}
+            },
+            {
+              "id": "411aff-331-11-cae2-3ec2a04d8d8f",
+              "type": "value",
+              "valueType": "number",
+              "children": [],
+              "repeatCount": ["1", "100"],
+              "fieldName": "delivery_cost",
+              "valueOptions": {
+                "min": { "number": 0, "checked": true },
+                "max": { "number": "10000", "checked": true },
+                "decimals": 0,
+                "multipleOf": 0
+              },
+              "nullValue": "0",
+              "selectedDependencies": {}
+            },
+            {
+              "id": "0057f2-2c7a-be73-a04b-76f5ff35c8ec",
+              "type": "value",
+              "valueType": "number",
+              "children": [],
+              "repeatCount": ["1", "100"],
+              "fieldName": "goods_total",
+              "valueOptions": {
+                "min": { "number": 0, "checked": true },
+                "max": { "number": "1000", "checked": true },
+                "decimals": 0,
+                "multipleOf": 0
+              },
+              "nullValue": "0",
+              "selectedDependencies": {}
+            },
+            {
+              "id": "b483bd-6aa-22cd-b462-518c5ee4a",
+              "type": "value",
+              "valueType": "number",
+              "children": [],
+              "repeatCount": ["1", "100"],
+              "fieldName": "custom_fee",
+              "valueOptions": {
+                "min": { "number": 0, "checked": true },
+                "max": { "number": "1000", "checked": true },
+                "decimals": 0,
+                "multipleOf": 0
+              },
+              "nullValue": "0",
+              "selectedDependencies": {}
+            }
+          ],
+          "repeatCount": ["1", "100"],
+          "fieldName": "payment",
+          "valueOptions": {},
+          "nullValue": "0",
+          "selectedDependencies": {}
+        },
+        {
+          "id": "d48032-16d-dff0-e5fb-3d1f330ab285",
+          "type": "array",
+          "valueType": "",
+          "children": [
+            {
+              "id": "f8f1f30-e6a3-6a7b-df67-f82cc17211c0",
+              "type": "object",
+              "valueType": "",
+              "children": [
+                {
+                  "id": "71a3b3d-c28a-a110-be0e-ec1d1bd164",
+                  "type": "value",
+                  "valueType": "number",
+                  "children": [],
+                  "repeatCount": ["1", "100"],
+                  "fieldName": "chrt_id",
+                  "valueOptions": {
+                    "min": { "number": "1000000", "checked": true },
+                    "max": { "number": "99999999", "checked": true },
+                    "decimals": "0",
+                    "multipleOf": "0"
+                  },
+                  "nullValue": "0",
+                  "selectedDependencies": {}
+                },
+                {
+                  "id": "c3be8a-5d0-abb2-68b-83aeb583872",
+                  "type": "value",
+                  "valueType": "regexp",
+                  "children": [],
+                  "repeatCount": ["1", "100"],
+                  "fieldName": "track_number",
+                  "valueOptions": { "text": "[A-Z]{14,20}" },
+                  "nullValue": "0",
+                  "selectedDependencies": {}
+                },
+                {
+                  "id": "8c7dc7-3e1e-b57-f4b6-5d6ac6a3dd05",
+                  "type": "value",
+                  "valueType": "number",
+                  "children": [],
+                  "repeatCount": ["1", "100"],
+                  "fieldName": "price",
+                  "valueOptions": {
+                    "min": { "number": 0, "checked": true },
+                    "max": { "number": "10000", "checked": true },
+                    "decimals": 0,
+                    "multipleOf": 0
+                  },
+                  "nullValue": "0",
+                  "selectedDependencies": {}
+                },
+                {
+                  "id": "eacbcd1-8a82-525d-f1f-058064e454",
+                  "type": "value",
+                  "valueType": "regexp",
+                  "children": [],
+                  "repeatCount": ["1", "100"],
+                  "fieldName": "rid",
+                  "valueOptions": { "text": "[a-z0-9]{18,22}" },
+                  "nullValue": "0",
+                  "selectedDependencies": {}
+                },
+                {
+                  "id": "7dc0ac0-2d4d-bfd-e16b-b873740bb3",
+                  "type": "value",
+                  "valueType": "string",
+                  "children": [],
+                  "repeatCount": ["1", "100"],
+                  "fieldName": "name",
+                  "valueOptions": {
+                    "minLength": "1",
+                    "maxLength": "1",
+                    "pattern": "",
+                    "unit": "word"
+                  },
+                  "nullValue": "0",
+                  "selectedDependencies": {}
+                },
+                {
+                  "id": "42208c7-a42e-38a7-0a28-0fae5f5f3736",
+                  "type": "value",
+                  "valueType": "number",
+                  "children": [],
+                  "repeatCount": ["1", "100"],
+                  "fieldName": "sale",
+                  "valueOptions": {
+                    "min": { "number": 0, "checked": true },
+                    "max": { "number": 100, "checked": true },
+                    "decimals": 0,
+                    "multipleOf": 0
+                  },
+                  "nullValue": "0",
+                  "selectedDependencies": {}
+                },
+                {
+                  "id": "b560bae-022c-3655-1ce-3a721236b0e7",
+                  "type": "value",
+                  "valueType": "regexp",
+                  "children": [],
+                  "repeatCount": ["1", "100"],
+                  "fieldName": "size",
+                  "valueOptions": { "text": "[0-9]{1,2}" },
+                  "nullValue": "0",
+                  "selectedDependencies": {}
+                },
+                {
+                  "id": "df8620-f312-170-d600-caee4cc65544",
+                  "type": "value",
+                  "valueType": "number",
+                  "children": [],
+                  "repeatCount": ["1", "100"],
+                  "fieldName": "total_price",
+                  "valueOptions": {
+                    "min": { "number": 0, "checked": true },
+                    "max": { "number": "10000", "checked": true },
+                    "decimals": 0,
+                    "multipleOf": 0
+                  },
+                  "nullValue": "0",
+                  "selectedDependencies": {}
+                },
+                {
+                  "id": "476741-b7a-b135-a61-bd67038102ab",
+                  "type": "value",
+                  "valueType": "number",
+                  "children": [],
+                  "repeatCount": ["1", "100"],
+                  "fieldName": "nm_id",
+                  "valueOptions": {
+                    "min": { "number": "10000", "checked": true },
+                    "max": { "number": "99999999", "checked": true },
+                    "decimals": 0,
+                    "multipleOf": 0
+                  },
+                  "nullValue": "0",
+                  "selectedDependencies": {}
+                },
+                {
+                  "id": "483386-187f-148e-f8f-668acfed2d",
+                  "type": "value",
+                  "valueType": "fullName",
+                  "children": [],
+                  "repeatCount": ["1", "100"],
+                  "fieldName": "brand",
+                  "valueOptions": { "gender": "any", "language": "en" },
+                  "nullValue": "0",
+                  "selectedDependencies": {
+                    "firstName": {
+                      "fieldName": "Auto",
+                      "indexPath": "*",
+                      "fieldNamePath": [],
+                      "id": null,
+                      "displayPath": "*"
+                    },
+                    "lastName": {
+                      "fieldName": "Auto",
+                      "indexPath": "*",
+                      "fieldNamePath": [],
+                      "id": null,
+                      "displayPath": "*"
+                    },
+                    "gender": {
+                      "fieldName": "Auto",
+                      "indexPath": "*",
+                      "fieldNamePath": [],
+                      "id": null,
+                      "displayPath": "*"
+                    },
+                    "locale": {
+                      "fieldName": "Auto",
+                      "indexPath": "*",
+                      "fieldNamePath": [],
+                      "id": null,
+                      "displayPath": "*"
+                    }
+                  }
+                },
+                {
+                  "id": "60b5b40-b014-601-217-bc8254e226b7",
+                  "type": "value",
+                  "valueType": "number",
+                  "children": [],
+                  "repeatCount": ["1", "100"],
+                  "fieldName": "status",
+                  "valueOptions": {
+                    "min": { "number": "100", "checked": true },
+                    "max": { "number": "999", "checked": true },
+                    "decimals": 0,
+                    "multipleOf": 0
+                  },
+                  "nullValue": "0",
+                  "selectedDependencies": {}
+                }
+              ],
+              "repeatCount": ["1", "100"],
+              "fieldName": "items",
+              "valueOptions": {},
+              "nullValue": "0",
+              "selectedDependencies": {}
+            }
+          ],
+          "repeatCount": ["1", "1"],
+          "fieldName": "items",
+          "valueOptions": {},
+          "nullValue": "0",
+          "selectedDependencies": {}
+        },
+        {
+          "id": "1f5a6f8-3b00-f6a2-b684-6f7bd3d05d",
+          "type": "value",
+          "valueType": "locale",
+          "children": [],
+          "repeatCount": ["1", "100"],
+          "fieldName": "locale",
+          "valueOptions": {},
+          "nullValue": "0",
+          "selectedDependencies": {
+            "country": {
+              "fieldName": "Auto",
+              "indexPath": "*",
+              "fieldNamePath": [],
+              "id": null,
+              "displayPath": "*"
+            }
+          }
+        },
+        {
+          "id": "ef46881-77e4-47bc-8873-82ae572a6",
+          "type": "value",
+          "valueType": "string",
+          "children": [],
+          "repeatCount": ["1", "100"],
+          "fieldName": "internal_signature",
+          "valueOptions": {
+            "minLength": 0,
+            "maxLength": "1",
+            "pattern": "",
+            "unit": "word"
+          },
+          "nullValue": "0",
+          "selectedDependencies": {}
+        },
+        {
+          "id": "677ac-3f3-cd7c-b16a-1ddcde6d610",
+          "type": "value",
+          "valueType": "string",
+          "children": [],
+          "repeatCount": ["1", "100"],
+          "fieldName": "customer_id",
+          "valueOptions": {
+            "minLength": "1",
+            "maxLength": "1",
+            "pattern": "",
+            "unit": "word"
+          },
+          "nullValue": "0",
+          "selectedDependencies": {}
+        },
+        {
+          "id": "bd4c6cd-801a-fb7-db3a-7163aa84f",
+          "type": "value",
+          "valueType": "string",
+          "children": [],
+          "repeatCount": ["1", "100"],
+          "fieldName": "delivery_service",
+          "valueOptions": {
+            "minLength": "1",
+            "maxLength": "1",
+            "pattern": "",
+            "unit": "word"
+          },
+          "nullValue": "0",
+          "selectedDependencies": {}
+        },
+        {
+          "id": "233f5f7-edee-e44-ddc3-bf5ae0486da",
+          "type": "value",
+          "valueType": "regexp",
+          "children": [],
+          "repeatCount": ["1", "100"],
+          "fieldName": "shardkey",
+          "valueOptions": { "text": "[0-9]{1,2}" },
+          "nullValue": "0",
+          "selectedDependencies": {}
+        },
+        {
+          "id": "c586dbe-b70e-b71e-c22a-c1ef876bba35",
+          "type": "value",
+          "valueType": "number",
+          "children": [],
+          "repeatCount": ["1", "100"],
+          "fieldName": "sm_id",
+          "valueOptions": {
+            "min": { "number": 0, "checked": true },
+            "max": { "number": 100, "checked": true },
+            "decimals": 0,
+            "multipleOf": 0
+          },
+          "nullValue": "0",
+          "selectedDependencies": {}
+        },
+        {
+          "id": "d0b4cd7-e2b-3516-b60-73f00fcad0f",
+          "type": "value",
+          "valueType": "dateTime",
+          "children": [],
+          "repeatCount": ["1", "100"],
+          "fieldName": "date_created",
+          "valueOptions": {
+            "min": "2022-10-07",
+            "max": "2023-10-07",
+            "format": "iso"
+          },
+          "nullValue": "0",
+          "selectedDependencies": {}
+        },
+        {
+          "id": "e018c32-571e-30a-5eea-5b4fe74648f",
+          "type": "value",
+          "valueType": "regexp",
+          "children": [],
+          "repeatCount": ["1", "100"],
+          "fieldName": "oof_shard",
+          "valueOptions": { "text": "[0-9]{1,2}" },
+          "nullValue": "0",
+          "selectedDependencies": {}
+        }
+      ],
+      "repeatCount": ["1", "100"],
+      "fieldName": "",
+      "valueOptions": {},
+      "nullValue": "0",
+      "selectedDependencies": {}
+    }
+  ],
+  "repeatCount": ["1", "100"],
+  "fieldName": "",
+  "valueOptions": {},
+  "nullValue": "0",
+  "selectedDependencies": {}
+}
