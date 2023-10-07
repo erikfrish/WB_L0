@@ -10,13 +10,6 @@ services:
     volumes:
       - './:/usr/src/L0'
     working_dir: "/usr/src/L0"
-    # command: 
-      # - "pwd"
-      # - "export PATH='/go:$PATH'"
-      # - "source /go/bin/go1.21"
-      # - "go run ./cmd/sub.main.go"
-      # - "go run /usr/src/L0/cmd/sub/main.go"
-      # - "go mod tidy"
     command: "go run /usr/src/L0/cmd/sub/main.go"
     networks:
       - L0-network
