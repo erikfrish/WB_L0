@@ -5,6 +5,7 @@ import (
 	"L0/internal/http-server/handlers/get"
 	"L0/internal/http-server/handlers/get_with_url"
 	mwLogger "L0/internal/http-server/middleware"
+	"L0/pkg/logger/sl"
 	"context"
 	"log/slog"
 	"net/http"
@@ -61,7 +62,7 @@ func StartServer(ctx context.Context, cfg *config.Config, log *slog.Logger, cach
 	}()
 
 	if err := srv.ListenAndServe(); err != http.ErrServerClosed {
-		log.Error("failed to start http server", err)
+		log.Error("failed to start http server", sl.Err(err))
 	}
 	<-cleanupDone
 

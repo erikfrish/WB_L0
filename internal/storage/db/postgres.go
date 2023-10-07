@@ -68,7 +68,6 @@ func (r *repository) GetAll(ctx context.Context) (any, error) {
 func (r *repository) Insert(ctx context.Context, data order.Data) error {
 	q := `INSERT INTO "L0_orders" (id, data) VALUES ($1, $2) RETURNING id`
 	order_uid := data.OrderUID
-
 	data_row, err := data.Value()
 	if err != nil {
 		return err
@@ -81,7 +80,7 @@ func (r *repository) Insert(ctx context.Context, data order.Data) error {
 				pgErr.Message, pgErr.Detail, pgErr.Where, pgErr.Code, pgErr.SQLState()))
 			return newErr
 		}
-		return errors.Join(errors.New("query error "), err)
+		return err
 	}
 	return nil
 }

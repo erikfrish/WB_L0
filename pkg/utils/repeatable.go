@@ -7,12 +7,9 @@ func DoWithTries(fn func() error, attempts int, delay time.Duration) (err error)
 		if err = fn(); err != nil {
 			time.Sleep(delay)
 			attempts--
-
 			continue
 		}
-
 		return nil
 	}
-
 	return
 }

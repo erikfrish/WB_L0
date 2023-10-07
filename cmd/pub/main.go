@@ -34,7 +34,7 @@ func main() {
 	mock_data_path := "mock_orders/mockturtle.json"
 	// check if file exists
 	if _, err := os.Stat(mock_data_path); os.IsNotExist(err) {
-		log.Error("mock data file does not exist: %s", mock_data_path)
+		log.Error("mock data file does not exist: %s", slog.String("mock_data_path", mock_data_path))
 	}
 	mock_turtle, err := os.ReadFile(mock_data_path)
 	if err != nil {
@@ -42,10 +42,10 @@ func main() {
 	}
 	var mock_data []order.Data
 	if err = json.Unmarshal(mock_turtle, &mock_data); err != nil {
-		log.Error("failed to unmarshal data from file", err)
+		log.Error("failed to unmarshal data from file", sl.Err(err))
 	}
 	// pri, _ := json.Marshal(mock_data)
-	log.Info("opening mock data file succeeded, len of data:", len(mock_data))
+	log.Info("opening mock data file succeeded, len of data:", slog.Int("len(mock_data)", len(mock_data)))
 
 	clusterID := "L0_cluster"
 	clientID := "L0_pub"
@@ -59,7 +59,7 @@ func main() {
 	for _, v := range mock_data {
 		msg_to_send, err := json.Marshal(v)
 		if err != nil {
-			log.Error("failed to unmarshal mock data", err)
+			log.Error("failed to unmarshal mock data", sl.Err(err))
 		}
 		sc.Publish(channel, msg_to_send)
 		time.Sleep(time.Second * 1)

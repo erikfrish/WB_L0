@@ -5,6 +5,7 @@ import (
 	order "L0/internal/strct"
 	"L0/pkg/logger/sl"
 	"context"
+	"fmt"
 	"log/slog"
 	"os"
 	"os/signal"
@@ -38,7 +39,7 @@ func SubscribeWithParams(ctx context.Context, log *slog.Logger, cache, rep DataS
 	//connecting to stan with nats connection
 	sc, err := stan.Connect(cfg.Stan.ClusterID, cfg.Stan.ClientID, stan.NatsConn(nc))
 	if err != nil {
-		log.Error("Can't connect to stan: %v.\nMake sure a NATS Streaming Server is running at: %s", err, cfg.Stan.URL)
+		log.Error(fmt.Sprintf("Can't connect to stan. Make sure a NATS Streaming Server is running at: %s", cfg.Stan.URL), sl.Err(err))
 	}
 
 	// initializing simple async subscriber and describing msgHandler
@@ -47,14 +48,14 @@ func SubscribeWithParams(ctx context.Context, log *slog.Logger, cache, rep DataS
 		// log.Debug("msg.Data: ", m.Data)
 		var data order.Data
 		if err := data.Scan(m.Data); err != nil {
-			log.Error(err.Error())
+			log.Error("can't Scan gotten data into order.Data strct", sl.Err(err))
 		}
 		// log.Debug("data decoded: ", data)
 		if err := rep.Insert(ctx, data); err != nil {
-			log.Error("can't Insert into db", err.Error())
+			log.Error("can't Insert into db", sl.Err(err))
 		}
 		if err := cache.Insert(ctx, data); err != nil {
-			log.Error("can't Insert into cache", err.Error())
+			log.Error("can't Insert into cache", sl.Err(err))
 		}
 	})
 	// }, stan.StartWithLastReceived())
