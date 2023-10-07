@@ -15,7 +15,7 @@ type Data struct {
 	TrackNumber string `json:"track_number" validate:"required"` // "WBILMTESTTRACK" // [A-Z]{12-14}
 	Entry       string `json:"entry,omitempty"`                  // "WBIL"
 	Delivery    struct {
-		Name    string `json:"name,omitempty" validate:"alpha"`  // "Test Testov"
+		Name    string `json:"name,omitempty"`                   // "Test Testov"
 		Phone   string `json:"phone,omitempty" validate:"e164"`  // "+9720000000"
 		Zip     string `json:"zip,omitempty"`                    // "2639809"
 		City    string `json:"city,omitempty"`                   // "Kiryat Mozkin"
@@ -88,6 +88,6 @@ func (d *Data) Validate() error {
 }
 
 // For now it validates not all fields, just:
-// OrderUID, TrackNumber, Delivery.Name, Delivery.Phone, Delivery.Email, Payment.Transaction,
+// OrderUID, TrackNumber, Delivery.Phone, Delivery.Email, Payment.Transaction,
 // Payment.Currency, Payment.Amount, Payment.Bank, Items.Price, Items.TotalPrice
 // If needed, we can expand it in future

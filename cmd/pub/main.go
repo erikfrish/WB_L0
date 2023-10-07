@@ -45,21 +45,25 @@ func main() {
 		log.Error("failed to unmarshal data from file", err)
 	}
 	// pri, _ := json.Marshal(mock_data)
-	log.Info("opening mock data file succeeded:", mock_data)
+	log.Info("opening mock data file succeeded, len of data:", len(mock_data))
 
 	clusterID := "L0_cluster"
 	clientID := "L0_pub"
+	channel := "L0_chan"
 	sc, err := stan.Connect(clusterID, clientID)
 	if err != nil {
 		log.Error("Connection to Stan wasn't successful", sl.Err(err))
 	}
 
-	channel := "L0_chan"
-
 	// Simple Synchronous Publisher
-	sc.Publish(channel, []byte{}) // does not return until an ack has been received from NATS Streaming
-	time.Sleep(time.Second * 2)
-
+	for _, v := range mock_data {
+		msg_to_send, err := json.Marshal(v)
+		if err != nil {
+			log.Error("failed to unmarshal mock data", err)
+		}
+		sc.Publish(channel, msg_to_send)
+		time.Sleep(time.Second * 1)
+	}
 	// Close connection
 	sc.Close()
 }
